@@ -11,18 +11,17 @@ class Network
   end
 
   def highest_paid_actor
-    name = roster.max_by {|k,v| v}
-    name[0]
+    characters.max_by {|character| character.salary}.actor
   end
 
   def payroll
-    payroll = roster
+    characters.reduce({}) do |hash, character|
+      hash[character.actor] = character.salary
+      hash
+    end
   end
 
-  def roster
-    roster = {}
-    @shows.each {|show| show.characters.each {|character|
-        roster[character.actor] = character.salary}}
-    roster
+  def characters
+    @shows.flat_map {|show| show.characters}
   end
 end
