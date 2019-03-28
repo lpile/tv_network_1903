@@ -4,7 +4,6 @@ class Network
   def initialize(name)
     @name = name
     @shows = []
-    @all_actors = {}
   end
 
   def add_show(show)
@@ -12,17 +11,18 @@ class Network
   end
 
   def highest_paid_actor
-    payroll
-    name = @all_actors.max_by {|k,v| v}
+    name = roster.max_by {|k,v| v}
     name[0]
   end
 
   def payroll
-    @shows.each do |show|
-      show.characters.each do |character|
-        @all_actors[character.actor] = character.salary
-      end
-    end
-    @all_actors
+    payroll = roster
+  end
+
+  def roster
+    roster = {}
+    @shows.each {|show| show.characters.each {|character|
+        roster[character.actor] = character.salary}}
+    roster
   end
 end
